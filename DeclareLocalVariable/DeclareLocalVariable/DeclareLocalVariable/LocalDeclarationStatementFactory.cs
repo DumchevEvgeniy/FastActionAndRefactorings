@@ -17,5 +17,17 @@ namespace DeclareLocalVariable {
                 SyntaxFactory.SeparatedList(new List<VariableDeclaratorSyntax>() { variableDeclarator }));
             return SyntaxFactory.LocalDeclarationStatement(variableDeclaration);
         }
+
+        public static LocalDeclarationStatementSyntax CreateLocalObjectStatement(String leftTypeName, String typeName, String localVariableName) {
+            var objectCreationExpression = SyntaxFactory.ObjectCreationExpression(SyntaxFactory.IdentifierName(typeName),
+                typeName.EndsWith("[]") ? null : SyntaxFactory.ArgumentList(),
+                null);
+            var variableDeclarator = SyntaxFactory.VariableDeclarator(SyntaxFactory.Identifier(localVariableName),
+                null,
+                SyntaxFactory.EqualsValueClause(objectCreationExpression));
+            var variableDeclaration = SyntaxFactory.VariableDeclaration(SyntaxFactory.IdentifierName(leftTypeName),
+                SyntaxFactory.SeparatedList(new List<VariableDeclaratorSyntax>() { variableDeclarator }));
+            return SyntaxFactory.LocalDeclarationStatement(variableDeclaration);
+        }
     }
 }

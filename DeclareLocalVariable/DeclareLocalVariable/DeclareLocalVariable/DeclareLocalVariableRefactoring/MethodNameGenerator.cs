@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DeclareLocalVariable {
-    internal static class MethodNameGenerator {
+namespace DeclareLocalVariable.DeclareLocalVariableRefactoring {
+    internal static class LocalNameByMathodNameGenerator {
         private static readonly IEnumerable<String> startsDefaultNames = new List<String> {
             "to", "try", "set", "create", "get", "with", "without"
         };

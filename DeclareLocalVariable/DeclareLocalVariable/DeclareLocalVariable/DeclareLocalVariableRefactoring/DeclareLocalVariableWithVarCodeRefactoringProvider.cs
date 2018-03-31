@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace DeclareLocalVariable {
+namespace DeclareLocalVariable.DeclareLocalVariableRefactoring {
     [ExportCodeRefactoringProvider(LanguageNames.CSharp, Name = nameof(DeclareLocalVariableWithVarCodeRefactoringProvider)), Shared]
     public class DeclareLocalVariableWithVarCodeRefactoringProvider : CodeRefactoringProvider {
         private readonly String RefactoringName = "Declare local";
