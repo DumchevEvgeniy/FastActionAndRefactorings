@@ -12,10 +12,10 @@ namespace DeclareLocalVariable {
 
         public sealed override async Task ComputeRefactoringsAsync(CodeRefactoringContext context) {
             var isCallPoint = await LocalVariableCodeRefactoring.IsCallPoint(context);
-            if (!isCallPoint)
-                return;
-            var action = CodeAction.Create(RefactoringName, c => LocalVariableCodeRefactoring.DeclareLocalVariable(context,"var"));
-            context.RegisterRefactoring(action);
+            if (isCallPoint) {
+                var action = CodeAction.Create(RefactoringName, c => LocalVariableCodeRefactoring.DeclareLocalVariable(context, "var"));
+                context.RegisterRefactoring(action);
+            }
         }
     }
 }

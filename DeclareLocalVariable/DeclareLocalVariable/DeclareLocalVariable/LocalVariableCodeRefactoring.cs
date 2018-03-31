@@ -10,6 +10,9 @@ using Microsoft.CodeAnalysis.Rename;
 namespace DeclareLocalVariable {
     public static class LocalVariableCodeRefactoring {
         public static async Task<Solution> DeclareLocalVariable(CodeRefactoringContext context, String typeName) {
+            var isCallPoint = await IsCallPoint(context);
+            if (!isCallPoint)
+                return null;
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             var currentNode = root.FindNode(context.Span);
             var invocationExpression = currentNode.DescendantNodesAndSelf().OfType<InvocationExpressionSyntax>().First();
@@ -42,7 +45,7 @@ namespace DeclareLocalVariable {
         public static async Task<Boolean> IsCallPoint(CodeRefactoringContext context) {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             var currentNode = root.FindNode(context.Span);
-            var statement = currentNode.DescendantNodesAndSelf().OfType<ExpressionStatementSyntax>().FirstOrDefault();
+            var statement = currentNode.AncestorsAndSelf().OfType<ExpressionStatementSyntax>().FirstOrDefault();
             if (statement == null)
                 return false;
             if (!currentNode.DescendantNodesAndSelf().Any(n => n is InvocationExpressionSyntax))
@@ -58,7 +61,11 @@ namespace DeclareLocalVariable {
             if (type == null || !type.IsType || type is IErrorTypeSymbol)
                 return null;
             var namedType = type as INamedTypeSymbol;
-            if (namedType != null && namedType.TypeArguments.ToList().Exists(t => t == null || t is IErrorTypeSymbol))
+            if (namedType == null)
+                return null;
+            if (namedType.SpecialType == SpecialType.System_Void)
+                return null;
+            if (namedType.TypeArguments.ToList().Exists(t => t == null || t is IErrorTypeSymbol || t.SpecialType == SpecialType.System_Void))
                 return null;
             return namedType;
         }
