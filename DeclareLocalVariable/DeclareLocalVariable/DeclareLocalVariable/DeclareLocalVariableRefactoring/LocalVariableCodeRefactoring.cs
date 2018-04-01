@@ -11,14 +11,14 @@ namespace DeclareLocalVariable.DeclareLocalVariableRefactoring {
         public static async Task<Solution> DeclareLocalVariable(CodeRefactoringContext context, String typeName) {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             var currentNode = root.FindNode(context.Span);
-            var invocationExpression = currentNode.DescendantNodesAndSelf().OfType<InvocationExpressionSyntax>().First();
+            var statement = currentNode.AncestorsAndSelf().OfType<ExpressionStatementSyntax>().FirstOrDefault();
+            var invocationExpression = statement.DescendantNodesAndSelf().OfType<InvocationExpressionSyntax>().First();
             var identifierName = invocationExpression.DescendantNodesAndSelf().LastOrDefault(n => n is IdentifierNameSyntax) as IdentifierNameSyntax;
             var methodName = LocalNameByMathodNameGenerator.CreateIdentifierName(identifierName.Identifier.ValueText);
             var localVariableName = LocalVariableNameGenerator.Create(methodName, currentNode, await context.Document.GetSemanticModelAsync());
             var localDeclarationStatement = LocalDeclarationStatementFactory.Create(typeName, localVariableName, invocationExpression);
-            var expression = currentNode.DescendantNodesAndSelf().OfType<ExpressionStatementSyntax>().First();
 
-            return await SolutionNodeReplacer.Replace(context, localDeclarationStatement, expression);
+            return await SolutionNodeReplacer.Replace(context, localDeclarationStatement, statement);
         }
 
         public static async Task<Boolean> IsCallPoint(CodeRefactoringContext context) {
@@ -27,7 +27,7 @@ namespace DeclareLocalVariable.DeclareLocalVariableRefactoring {
             var statement = currentNode.AncestorsAndSelf().OfType<ExpressionStatementSyntax>().FirstOrDefault();
             if (statement == null)
                 return false;
-            if (!currentNode.DescendantNodesAndSelf().Any(n => n is InvocationExpressionSyntax))
+            if (!statement.DescendantNodesAndSelf().Any(n => n is InvocationExpressionSyntax))
                 return false;
             var semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken);
             return GetNamedType(semanticModel, statement) != null;

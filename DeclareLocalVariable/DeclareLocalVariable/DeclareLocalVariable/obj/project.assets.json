@@ -5058,9 +5058,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Project\\FastActionAndRefactorings\\DeclareLocalVariable\\DeclareLocalVariable\\DeclareLocalVariable\\DeclareLocalVariable.csproj",
-      "projectName": "DeclareLocalVariable",
-      "projectPath": "C:\\Project\\FastActionAndRefactorings\\DeclareLocalVariable\\DeclareLocalVariable\\DeclareLocalVariable\\DeclareLocalVariable.csproj",
+      "projectUniqueName": "C:\\Project\\FastActionAndRefactorings\\DeclareLocalVariable\\DeclareLocalVariable\\DeclareLocalVariable\\QuickActionsAndRefactorings.csproj",
+      "projectName": "QuickActionsAndRefactorings",
+      "projectPath": "C:\\Project\\FastActionAndRefactorings\\DeclareLocalVariable\\DeclareLocalVariable\\DeclareLocalVariable\\QuickActionsAndRefactorings.csproj",
       "packagesPath": "C:\\Users\\1\\.nuget\\packages\\",
       "outputPath": "C:\\Project\\FastActionAndRefactorings\\DeclareLocalVariable\\DeclareLocalVariable\\DeclareLocalVariable\\obj\\",
       "projectStyle": "PackageReference",

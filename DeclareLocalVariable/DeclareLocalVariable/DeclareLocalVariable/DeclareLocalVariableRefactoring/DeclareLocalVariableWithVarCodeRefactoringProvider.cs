@@ -10,13 +10,13 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace DeclareLocalVariable.DeclareLocalVariableRefactoring {
     [ExportCodeRefactoringProvider(LanguageNames.CSharp, Name = nameof(DeclareLocalVariableWithVarCodeRefactoringProvider)), Shared]
     public class DeclareLocalVariableWithVarCodeRefactoringProvider : CodeRefactoringProvider {
-        private readonly String RefactoringName = "Declare local";
+        private readonly String refactoringName = "Declare local variable";
 
         protected async Task<String> GetTypeName(CodeRefactoringContext context) {
             var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             var currentNode = root.FindNode(context.Span);
             var semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken);
-            var statement = currentNode.DescendantNodesAndSelf().OfType<ExpressionStatementSyntax>().FirstOrDefault();
+            var statement = currentNode.AncestorsAndSelf().OfType<ExpressionStatementSyntax>().FirstOrDefault();
             return LocalVariableCodeRefactoring.GetNamedType(semanticModel, statement).MetadataName;
         }
 
@@ -25,7 +25,7 @@ namespace DeclareLocalVariable.DeclareLocalVariableRefactoring {
             if (!isCallPoint)
                 return;
             var typeName = await GetTypeName(context);
-            var action = CodeAction.Create(RefactoringName, c => LocalVariableCodeRefactoring.DeclareLocalVariable(context, typeName));
+            var action = CodeAction.Create(refactoringName, c => LocalVariableCodeRefactoring.DeclareLocalVariable(context, typeName));
             context.RegisterRefactoring(action);
         }
     }
